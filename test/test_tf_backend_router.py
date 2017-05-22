@@ -208,7 +208,7 @@ Plan: 8 to add, 0 to change, 0 to destroy.
     cluster:                                    "default"
     deployment_maximum_percent:                 "200"
     deployment_minimum_healthy_percent:         "100"
-    desired_count:                              "3"
+    desired_count:                              "1"
     iam_role:                                   "${aws_iam_role.role.arn}"
     load_balancer.#:                            "1"
     load_balancer.~2788651468.container_name:   "app"

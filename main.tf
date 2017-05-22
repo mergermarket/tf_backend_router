@@ -1,8 +1,10 @@
 module "404_container_definition" {
   source = "git::https://github.com/mergermarket/tf_ecs_container_definition.git?ref=PLAT-915_first_implementation"
 
-  name  = "404"
-  image = "mergermarket/404"
+  name   = "404"
+  image  = "mergermarket/404"
+  cpu    = "16"
+  memory = "16"
 }
 
 module "404_task_definition" {
@@ -18,6 +20,7 @@ module "404_ecs_service" {
   name            = "${format("%s-%s-404", var.env, var.component)}"
   vpc_id          = "${var.platform_config["vpc"]}"
   task_definition = "${module.404_task_definition.arn}"
+  desired_count   = "${var.env == "live" ? 2 : 1}"
 }
 
 module "alb" {
