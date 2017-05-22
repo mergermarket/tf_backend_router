@@ -17,7 +17,7 @@ module "404_ecs_service" {
 
   name            = "${format("%s-%s-404", var.env, var.component)}"
   vpc_id          = "${var.platform_config["vpc"]}"
-  task_definition = "module.404_task_definition.arn"
+  task_definition = "${module.404_task_definition.arn}"
 }
 
 module "alb" {

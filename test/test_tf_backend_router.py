@@ -224,7 +224,7 @@ Plan: 8 to add, 0 to change, 0 to destroy.
     placement_strategy.2093792364.type:         "spread"
     placement_strategy.3946258308.field:        "instanceId"
     placement_strategy.3946258308.type:         "spread"
-    task_definition:                            "module.404_task_definition.arn"
+    task_definition:                            "${var.task_definition}"
         """.strip() in output # noqa
 
     def test_create_404_service_iam_role(self):
