@@ -1,13 +1,13 @@
 Backend Router terraform module
 ===============================
 
-This module creates a Backend Router (BR) service which, in effect, is a shared ALB to which individual services can be attached.
-Ideally, there should be a single BR per Team (eg. platform-backend-router).
+This module creates a Backend Router service which, in effect, is a shared ALB to which individual services can be attached.
+Ideally, there should be a single Backend Router per Team (eg. platform-backend-router).
 
-The BR consists of:
-- **internal** ALB - this ALB should never be a public ALB
+The Backend Router consists of:
+- **internal** ALB - as per Mergermarket policy - team Backend Routing ALBs should be configured as `internal` ALB - if you need to expose service externally you need to deploy a `frontend-router` and attach your service to it
 - default, HTTPS Listener, with certificate as per `dns_domain` parameter, by default diverting traffic to `404` ECS Service
-- 404 ECS Service which deployes all the required components (404 ECS Service, 404 Target Group, 404 IAM Role and Policy and) and runs a tiny binary which returns 404 to every call
+- 404 ECS Service which deploys all the required components (404 ECS Service, 404 Target Group, 404 IAM Role and Policy and) and runs a tiny binary which returns 404 to every call
 
 Services attached to this ALB should be using `host-based` conditions for routing, rather than `path-based`.
 
