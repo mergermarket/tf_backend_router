@@ -1,8 +1,5 @@
 import unittest
-import os
 from subprocess import check_call, check_output
-
-cwd = os.getcwd()
 
 
 class TestTFBackendRouter(unittest.TestCase):
