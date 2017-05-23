@@ -23,13 +23,30 @@ Module Input Variables
 Usage
 -----
 ```hcl
+
+# the below platform_config map can be passed as a TF var-file (eg. JSON file)
+variable "platform_config" {
+  type = "map"
+  default  = {
+    platform_config: {
+      azs: "eu-west-1a,eu-west-1b,eu-west-1c",
+      elb_certificates.domain_com: "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012",
+      route53_zone_id.domain_com: "AAAAAAAAAAAAA",
+      ecs_cluster.default.client_security_group: "sg-00000000",
+      ecs_cluster.default.security_group: "sg-11111111",
+      vpc: "vpc-12345678",
+      private_subnets: "subnet-00000000,subnet-11111111,subnet-22222222"
+    }
+  }
+}
+
 module "backend_router" {
   source = "../.."
 
   team            = "footeam"
   env             = "fooenv"
   component       = "foocomponent"
-  platform_config = "{\"foo\":\"bar\"}"
+  platform_config = "${var.platform_config}"
 
   # optional
   dns_domain = "domain.com"
