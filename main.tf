@@ -11,7 +11,7 @@ module "404_container_definition" {
 module "404_task_definition" {
   source = "github.com/mergermarket/tf_ecs_task_definition"
 
-  family                = "404"
+  family                = "${join("", slice(split("", format("%s-%s", var.env, var.component)), 0, length(format("%s-%s", var.env, var.component)) > 22 ? 23 : length(format("%s-%s", var.env, var.component))))}-404"
   container_definitions = ["${module.404_container_definition.rendered}"]
 }
 

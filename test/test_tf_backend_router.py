@@ -52,8 +52,10 @@ Plan: 8 to add, 0 to change, 0 to destroy.
     ip_address_type:            "<computed>"
     name:                       "dev-foobar-router"
     security_groups.#:          "<computed>"
-    subnets.#:                  "1"
-    subnets.2516719898:         "subnet-00000000,subnet-11111111,subnet-22222222"
+    subnets.#:                  "3"
+    subnets.1120168869:         "subnet-11111111"
+    subnets.155686431:          "subnet-00000000"
+    subnets.2655022443:         "subnet-22222222"
     vpc_id:                     "<computed>"
     zone_id:                    "<computed>"
         """.strip() in output # noqa
