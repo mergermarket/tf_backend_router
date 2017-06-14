@@ -1,5 +1,5 @@
 module "404_container_definition" {
-  source = "git::https://github.com/mergermarket/tf_ecs_container_definition.git?ref=PLAT-915_first_implementation"
+  source = "github.com/mergermarket/tf_ecs_container_definition.git"
 
   name   = "404"
   image  = "mergermarket/404"
