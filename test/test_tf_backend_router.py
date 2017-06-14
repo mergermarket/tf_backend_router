@@ -147,7 +147,7 @@ Plan: 8 to add, 0 to change, 0 to destroy.
 + module.backend_router.404_task_definition.aws_ecs_task_definition.taskdef
     arn:                   "<computed>"
     container_definitions: "7599fdbfa93c9a10d50af7e18b88d4c51e8e9179"
-    family:                "404"
+    family:                "dev-foobar-404"
     network_mode:          "<computed>"
     revision:              "<computed>"
         """.strip() in output
@@ -211,10 +211,10 @@ Plan: 8 to add, 0 to change, 0 to destroy.
     desired_count:                              "1"
     iam_role:                                   "${aws_iam_role.role.arn}"
     load_balancer.#:                            "1"
-    load_balancer.~2788651468.container_name:   "app"
-    load_balancer.~2788651468.container_port:   "8000"
-    load_balancer.~2788651468.elb_name:         ""
-    load_balancer.~2788651468.target_group_arn: "${aws_alb_target_group.target_group.arn}"
+    load_balancer.~1558623517.container_name:   "404"
+    load_balancer.~1558623517.container_port:   "8000"
+    load_balancer.~1558623517.elb_name:         ""
+    load_balancer.~1558623517.target_group_arn: "${aws_alb_target_group.target_group.arn}"
     name:                                       "dev-foobar-404"
     placement_strategy.#:                       "2"
     placement_strategy.2093792364.field:        "attribute:ecs.availability-zone"

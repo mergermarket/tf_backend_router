@@ -1,10 +1,11 @@
 module "404_container_definition" {
   source = "github.com/mergermarket/tf_ecs_container_definition.git"
 
-  name   = "404"
-  image  = "mergermarket/404"
-  cpu    = "16"
-  memory = "16"
+  name           = "404"
+  image          = "mergermarket/404"
+  cpu            = "16"
+  memory         = "16"
+  container_port = "8000"
 }
 
 module "404_task_definition" {
@@ -18,6 +19,8 @@ module "404_ecs_service" {
   source = "github.com/mergermarket/tf_load_balanced_ecs_service"
 
   name            = "${format("%s-%s-404", var.env, var.component)}"
+  container_name  = "404"
+  container_port  = "8000"
   vpc_id          = "${var.platform_config["vpc"]}"
   task_definition = "${module.404_task_definition.arn}"
   desired_count   = "${var.env == "live" ? 2 : 1}"
