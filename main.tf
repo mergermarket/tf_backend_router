@@ -32,7 +32,7 @@ module "alb" {
   name                     = "${format("%s-%s-router", var.env, var.component)}"
   vpc_id                   = "${var.platform_config["vpc"]}"
   subnet_ids               = ["${split(",", var.platform_config["private_subnets"])}"]
-  extra_security_groups    = "${var.extra_security_groups}"
+  extra_security_groups    = "${concat(list(var.platform_config["ecs_cluster.default.client_security_group"]), var.extra_security_groups)}"
   certificate_arn          = "${var.platform_config["elb_certificates.${replace(var.dns_domain, "/\\./", "_")}"]}"
   default_target_group_arn = "${module.404_ecs_service.target_group_arn}"
 }
