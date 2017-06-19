@@ -1,8 +1,7 @@
 # required
 variable "dns_domain" {
-  description = ""
+  description = "DNS domain to use for SSL certificate"
   type        = "string"
-  default     = "mmgapi.net"
 }
 
 variable "aws_region" {

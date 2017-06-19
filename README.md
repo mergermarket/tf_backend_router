@@ -18,7 +18,7 @@ Module Input Variables
 - `env` - (string) - **REQUIRED** - Environment deployed to
 - `component` - (string) - **REQUIRED** - component name
 - `platform_config` - (map) - **REQUIRED** - Mergermarket Platform config dictionary (see tests for example one)
-- `dns_domain` - (string) - domain to be used when looking up SSL Certificate
+- `dns_domain` - (string) - **REQUIRED** - domain to be used when looking up SSL Certificate
 
 Usage
 -----
@@ -47,9 +47,7 @@ module "backend_router" {
   env             = "fooenv"
   component       = "foocomponent"
   platform_config = "${var.platform_config}"
-
-  # optional
-  dns_domain = "domain.com"
+  dns_domain      = "domain.com"
 }
 ```
 
