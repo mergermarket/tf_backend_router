@@ -11,19 +11,20 @@ module "404_container_definition" {
 module "404_task_definition" {
   source = "github.com/mergermarket/tf_ecs_task_definition"
 
-  family                = "${join("", slice(split("", format("%s-%s", var.env, var.component)), 0, length(format("%s-%s", var.env, var.component)) > 22 ? 23 : length(format("%s-%s", var.env, var.component))))}-404"
+  family                = "${var.env}-${var.component}-404"
   container_definitions = ["${module.404_container_definition.rendered}"]
 }
 
 module "404_ecs_service" {
-  source = "github.com/mergermarket/tf_load_balanced_ecs_service"
+  source = "github.com/mergermarket/tf_load_balanced_ecs_service?ref=depend_on_alb_listener"
 
-  name            = "${format("%s-%s-404", var.env, var.component)}"
-  container_name  = "404"
-  container_port  = "8000"
-  vpc_id          = "${var.platform_config["vpc"]}"
-  task_definition = "${module.404_task_definition.arn}"
-  desired_count   = "${var.env == "live" ? 2 : 1}"
+  name             = "${format("%s-%s-404", var.env, var.component)}"
+  container_name   = "404"
+  container_port   = "8000"
+  vpc_id           = "${var.platform_config["vpc"]}"
+  task_definition  = "${module.404_task_definition.arn}"
+  desired_count    = "${var.env == "live" ? 2 : 1}"
+  alb_listener_arn = "${module.alb.alb_listener_arn}"
 }
 
 module "alb" {
