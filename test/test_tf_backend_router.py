@@ -23,7 +23,7 @@ class TestTFBackendRouter(unittest.TestCase):
 
         # Then
         assert """
-Plan: 8 to add, 0 to change, 0 to destroy.
+Plan: 9 to add, 0 to change, 0 to destroy.
         """.strip() in output
 
     def test_create_alb(self):
@@ -147,11 +147,6 @@ Plan: 8 to add, 0 to change, 0 to destroy.
         # Then
         assert """
 + module.backend_router.404_task_definition.aws_ecs_task_definition.taskdef
-    arn:                   "<computed>"
-    container_definitions: "7599fdbfa93c9a10d50af7e18b88d4c51e8e9179"
-    family:                "dev-foobar-404"
-    network_mode:          "<computed>"
-    revision:              "<computed>"
         """.strip() in output
 
     def test_create_404_service_target_group(self):
@@ -249,7 +244,7 @@ Plan: 8 to add, 0 to change, 0 to destroy.
         assert """
     create_date:        "<computed>"
     name:               "<computed>"
-    name_prefix:        "dev-foobar-404-service-role"
+    name_prefix:        "dev-foobar-404"
     path:               "/"
     unique_id:          "<computed>"
         """.strip() in output # noqa
@@ -272,5 +267,5 @@ Plan: 8 to add, 0 to change, 0 to destroy.
         assert """
 + module.backend_router.404_ecs_service.aws_iam_role_policy.policy
     name:        "<computed>"
-    name_prefix: "dev-foobar-404-service-policy"
+    name_prefix: "dev-foobar-404
         """.strip() in output # noqa
