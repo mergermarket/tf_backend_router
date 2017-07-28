@@ -1,6 +1,8 @@
 Backend Router terraform module
 ===============================
 
+[![Build Status](https://travis-ci.org/mergermarket/tf_backend_router.svg?branch=master)](https://travis-ci.org/mergermarket/tf_backend_router)
+
 This module creates a Backend Router service which, in effect, is a shared ALB to which individual services can be attached.
 Ideally, there should be a single Backend Router per Team (e.g. platform-backend-router).
 
