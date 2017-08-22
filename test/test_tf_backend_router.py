@@ -23,7 +23,7 @@ class TestTFBackendRouter(unittest.TestCase):
 
         # Then
         assert """
-Plan: 9 to add, 0 to change, 0 to destroy.
+Plan: 10 to add, 0 to change, 0 to destroy.
         """.strip() in output
 
     def test_create_alb(self):
@@ -53,9 +53,13 @@ Plan: 9 to add, 0 to change, 0 to destroy.
     name:                       "dev-foobar-router"
     security_groups.#:          "<computed>"
     subnets.#:                  "3"
-    subnets.1120168869:         "subnet-11111111"
-    subnets.155686431:          "subnet-00000000"
-    subnets.2655022443:         "subnet-22222222"
+        """.strip() in output # noqa
+
+        assert """
+    tags.%:                     "3"
+    tags.component:             "foobar"
+    tags.environment:           "dev"
+    tags.team:                  "foobar"
     vpc_id:                     "<computed>"
     zone_id:                    "<computed>"
         """.strip() in output # noqa
