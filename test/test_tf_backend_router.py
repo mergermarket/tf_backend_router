@@ -23,7 +23,7 @@ class TestTFBackendRouter(unittest.TestCase):
 
         # Then
         assert """
-Plan: 9 to add, 0 to change, 0 to destroy.
+Plan: 10 to add, 0 to change, 0 to destroy.
         """.strip() in output
 
     def test_create_alb(self):
