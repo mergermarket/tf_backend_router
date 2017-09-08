@@ -17,6 +17,10 @@ class TestTFBackendRouter(unittest.TestCase):
             '-var', 'team=foobar',
             '-var', 'aws_region=eu-west-1',
             '-var-file=test/platform-config/eu-west-1.json',
+            '-target=module.backend_router.module.404_container_definition',
+            '-target=module.backend_router.module.404_task_definition',
+            '-target=module.backend_router.module.404_ecs_service',
+            '-target=module.backend_router.module.alb',
             '-no-color',
             'test/infra'
         ]).decode('utf-8')
@@ -36,6 +40,7 @@ Plan: 10 to add, 0 to change, 0 to destroy.
             '-var', 'team=foobar',
             '-var', 'aws_region=eu-west-1',
             '-var-file=test/platform-config/eu-west-1.json',
+            '-target=module.backend_router.module.alb',
             '-no-color',
             'test/infra'
         ]).decode('utf-8')
@@ -74,6 +79,7 @@ Plan: 10 to add, 0 to change, 0 to destroy.
             '-var', 'team=foobar',
             '-var', 'aws_region=eu-west-1',
             '-var-file=test/platform-config/eu-west-1.json',
+            '-target=module.backend_router.module.alb',
             '-no-color',
             'test/infra'
         ]).decode('utf-8')
@@ -82,7 +88,7 @@ Plan: 10 to add, 0 to change, 0 to destroy.
         assert """
 + module.backend_router.alb.aws_alb_listener.https
     arn:                               "<computed>"
-    certificate_arn:                   "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012"
+    certificate_arn:                   "${module.aws_acm_certificate_arn.arn}"
     default_action.#:                  "1"
     default_action.0.target_group_arn: "${var.default_target_group_arn}"
     default_action.0.type:             "forward"
@@ -102,6 +108,7 @@ Plan: 10 to add, 0 to change, 0 to destroy.
             '-var', 'team=foobar',
             '-var', 'aws_region=eu-west-1',
             '-var-file=test/platform-config/eu-west-1.json',
+            '-target=module.backend_router.module.alb',
             '-no-color',
             'test/infra'
         ]).decode('utf-8')
@@ -144,6 +151,7 @@ Plan: 10 to add, 0 to change, 0 to destroy.
             '-var', 'team=foobar',
             '-var', 'aws_region=eu-west-1',
             '-var-file=test/platform-config/eu-west-1.json',
+            '-target=module.backend_router.module.404_task_definition',
             '-no-color',
             'test/infra'
         ]).decode('utf-8')
@@ -163,6 +171,7 @@ Plan: 10 to add, 0 to change, 0 to destroy.
             '-var', 'team=foobar',
             '-var', 'aws_region=eu-west-1',
             '-var-file=test/platform-config/eu-west-1.json',
+            '-target=module.backend_router.module.alb',
             '-no-color',
             'test/infra'
         ]).decode('utf-8')
@@ -199,6 +208,7 @@ Plan: 10 to add, 0 to change, 0 to destroy.
             '-var', 'team=foobar',
             '-var', 'aws_region=eu-west-1',
             '-var-file=test/platform-config/eu-west-1.json',
+            '-target=module.backend_router.module.404_ecs_service',
             '-no-color',
             'test/infra'
         ]).decode('utf-8')
@@ -235,6 +245,7 @@ Plan: 10 to add, 0 to change, 0 to destroy.
             '-var', 'team=foobar',
             '-var', 'aws_region=eu-west-1',
             '-var-file=test/platform-config/eu-west-1.json',
+            '-target=module.backend_router.module.404_ecs_service',
             '-no-color',
             'test/infra'
         ]).decode('utf-8')
@@ -263,6 +274,7 @@ Plan: 10 to add, 0 to change, 0 to destroy.
             '-var', 'team=foobar',
             '-var', 'aws_region=eu-west-1',
             '-var-file=test/platform-config/eu-west-1.json',
+            '-target=module.backend_router.module.404_ecs_service',
             '-no-color',
             'test/infra'
         ]).decode('utf-8')
