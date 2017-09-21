@@ -30,7 +30,7 @@ module "404_ecs_service" {
 }
 
 module "alb" {
-  source = "github.com/mergermarket/tf_alb?ref=allow_access_logs"
+  source = "github.com/mergermarket/tf_alb"
 
   name                     = "${format("%s-%s-router", var.env, var.component)}"
   vpc_id                   = "${var.platform_config["vpc"]}"
