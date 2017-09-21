@@ -5,7 +5,7 @@ module "404_container_definition" {
   image          = "mergermarket/404"
   cpu            = "16"
   memory         = "16"
-  container_port = "8000"
+  container_port = "80"
 }
 
 module "404_task_definition" {
