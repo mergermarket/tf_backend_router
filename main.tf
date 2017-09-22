@@ -26,7 +26,6 @@ module "404_ecs_service" {
   desired_count        = "${var.env == "live" ? 2 : 1}"
   alb_listener_arn     = "${module.alb.alb_listener_arn}"
   alb_arn              = "${module.alb.alb_arn}"
-  health_check_matcher = "404"
 }
 
 module "alb" {
