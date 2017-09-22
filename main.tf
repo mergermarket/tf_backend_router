@@ -26,7 +26,6 @@ module "404_ecs_service" {
   desired_count        = "${var.env == "live" ? 2 : 1}"
   alb_listener_arn     = "${module.alb.alb_listener_arn}"
   alb_arn              = "${module.alb.alb_arn}"
-  health_check_matcher = "404"
 }
 
 module "alb" {
@@ -38,6 +37,8 @@ module "alb" {
   extra_security_groups    = "${concat(list(var.platform_config["ecs_cluster.default.client_security_group"]), var.extra_security_groups)}"
   certificate_domain_name  = "${format("*.%s%s", var.env != "live" ? "dev." : "", var.dns_domain)}"
   default_target_group_arn = "${module.404_ecs_service.target_group_arn}"
+  access_logs_bucket       = "${lookup(var.platform_config, "elb_access_logs_bucket", "")}"
+  access_logs_enabled      = "${"${lookup(var.platform_config, "elb_access_logs_bucket", "")}" == "" ? false : true}"
 
   tags = {
     component   = "${var.component}"
