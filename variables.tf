@@ -27,6 +27,12 @@ variable "platform_config" {
   default     = {}
 }
 
+variable "alb_internal" {
+  description = "If true, the LB will be internal"
+  type        = "string"
+  default     = "true"
+}
+
 # optional
 variable "extra_security_groups" {
   description = "Extra Security Groups to attach to the ALB"

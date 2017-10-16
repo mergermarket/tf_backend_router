@@ -11,6 +11,20 @@ module "backend_router" {
   dns_domain = "domain.com"
 }
 
+module "backend_router_external" {
+  source = "../.."
+
+  team            = "${var.team}"
+  env             = "${var.env}"
+  component       = "${var.component}"
+  platform_config = "${var.platform_config}"
+
+  alb_internal = "false"
+
+  # optional
+  dns_domain = "domain.com"
+}
+
 # configure provider to not try too hard talking to AWS API
 provider "aws" {
   skip_credentials_validation = true
