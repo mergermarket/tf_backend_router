@@ -63,6 +63,13 @@ Plan: 10 to add, 0 to change, 0 to destroy.
         """.strip() in output # noqa
 
         assert """
+    subnets.#:                  "3"
+    subnets.1120168869:         "subnet-11111111"
+    subnets.155686431:          "subnet-00000000"
+    subnets.2655022443:         "subnet-22222222"
+        """.strip() in output # noqa
+
+        assert """
     tags.%:                     "3"
     tags.component:             "foobar"
     tags.environment:           "dev"
@@ -286,4 +293,43 @@ Plan: 10 to add, 0 to change, 0 to destroy.
 + module.backend_router.404_ecs_service.aws_iam_role_policy.policy
     name:        "<computed>"
     name_prefix: "dev-foobar-404
+        """.strip() in output # noqa
+
+    def test_create_external_alb(self):
+        # When
+        output = check_output([
+            'terraform',
+            'plan',
+            '-var', 'env=dev',
+            '-var', 'component=foobar',
+            '-var', 'team=foobar',
+            '-var', 'aws_region=eu-west-1',
+            '-var-file=test/platform-config/eu-west-1.json',
+            '-target=module.backend_router_external.module.alb',
+            '-no-color',
+            'test/infra'
+        ]).decode('utf-8')
+
+        # Then
+        assert """
++ module.backend_router_external.alb.aws_alb.alb
+    access_logs.#:              "1"
+    access_logs.0.enabled:      "false"
+    arn:                        "<computed>"
+    arn_suffix:                 "<computed>"
+    dns_name:                   "<computed>"
+    enable_deletion_protection: "false"
+    idle_timeout:               "60"
+    internal:                   "false"
+    ip_address_type:            "<computed>"
+    name:                       "dev-foobar-router"
+    security_groups.#:          "<computed>"
+    subnets.#:                  "3"
+        """.strip() in output # noqa
+
+        assert """
+    subnets.#:                  "3"
+    subnets.2377178398:         "subnet-555555555"
+    subnets.3586363601:         "subnet-33333333"
+    subnets.4231620278:         "subnet-44444444"
         """.strip() in output # noqa

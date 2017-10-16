@@ -7,7 +7,7 @@ This module creates a Backend Router service which, in effect, is a shared ALB t
 Ideally, there should be a single Backend Router per Team (e.g. platform-backend-router).
 
 The Backend Router consists of:
-- **internal** ALB - as per Mergermarket policy - team Backend Routing ALBs should be configured as `internal` ALB - if you need to expose service externally you need to deploy a `frontend-router` and attach your service to it
+- an ALB
 - default, HTTPS Listener, with a certificate as per `dns_domain` parameter, by default diverting traffic to `404` ECS Service
 - 404 ECS Service which deploys all the required components (404 ECS Service, 404 Target Group, 404 IAM Role and Policy and) and runs a tiny binary which returns 404 to every call
 
@@ -21,6 +21,7 @@ Module Input Variables
 - `component` - (string) - **REQUIRED** - component name
 - `platform_config` - (map) - **REQUIRED** - Mergermarket Platform config dictionary (see tests for example one)
 - `dns_domain` - (string) - **REQUIRED** - domain to be used when looking up SSL Certificate
+- `alb_internal` - (bool) - If true, the ALB will be internal (default: `true`)
 
 Usage
 -----
@@ -38,6 +39,7 @@ variable "platform_config" {
       ecs_cluster.default.security_group: "sg-11111111",
       vpc: "vpc-12345678",
       private_subnets: "subnet-00000000,subnet-11111111,subnet-22222222"
+      public_subnets: "subnet-333333333,subnet-44444444,subnet-55555555"
     }
   }
 }
