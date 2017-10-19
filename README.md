@@ -58,4 +58,5 @@ module "backend_router" {
 Outputs
 -------
 - `alb_dns_name` - The DNS name of the load balancer
-- `alb_listener_arn` - The ARN of the load balancer
+- `alb_arn` - The AWS ARN of the load balancer
+- `alb_listener_arn` - The ARN of the load balancer listener
