@@ -1,3 +1,10 @@
+module "404_ecs_service" {
+  source = "modules/deprecated"
+
+  name                 = "${format("%s-%s-404", var.env, var.component)}"
+  vpc_id               = "${var.platform_config["vpc"]}"
+}
+
 module "alb" {
   source = "github.com/mergermarket/tf_alb"
 
