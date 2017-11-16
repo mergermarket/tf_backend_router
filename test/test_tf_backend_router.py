@@ -17,9 +17,6 @@ class TestTFBackendRouter(unittest.TestCase):
             '-var', 'team=foobar',
             '-var', 'aws_region=eu-west-1',
             '-var-file=test/platform-config/eu-west-1.json',
-            '-target=module.backend_router.module.404_container_definition',
-            '-target=module.backend_router.module.404_task_definition',
-            '-target=module.backend_router.module.404_ecs_service',
             '-target=module.backend_router.module.alb',
             '-no-color',
             'test/infra'
@@ -27,7 +24,7 @@ class TestTFBackendRouter(unittest.TestCase):
 
         # Then
         assert """
-Plan: 10 to add, 0 to change, 0 to destroy.
+Plan: 4 to add, 0 to change, 0 to destroy.
         """.strip() in output
 
     def test_create_alb(self):
@@ -158,151 +155,6 @@ Plan: 10 to add, 0 to change, 0 to destroy.
     vpc_id:                                "vpc-12345678"
         """.strip() in output # noqa
 
-    def test_create_404_service_task_definition(self):
-        # When
-        output = check_output([
-            'terraform',
-            'plan',
-            '-var', 'env=dev',
-            '-var', 'component=foobar',
-            '-var', 'team=foobar',
-            '-var', 'aws_region=eu-west-1',
-            '-var-file=test/platform-config/eu-west-1.json',
-            '-target=module.backend_router.module.404_task_definition',
-            '-no-color',
-            'test/infra'
-        ]).decode('utf-8')
-
-        # Then
-        assert """
-+ module.backend_router.404_task_definition.aws_ecs_task_definition.taskdef
-        """.strip() in output
-
-    def test_create_404_service_target_group(self):
-        # When
-        output = check_output([
-            'terraform',
-            'plan',
-            '-var', 'env=dev',
-            '-var', 'component=foobar',
-            '-var', 'team=foobar',
-            '-var', 'aws_region=eu-west-1',
-            '-var-file=test/platform-config/eu-west-1.json',
-            '-target=module.backend_router.module.alb',
-            '-no-color',
-            'test/infra'
-        ]).decode('utf-8')
-
-        # Then
-        assert """
-+ module.backend_router.404_ecs_service.aws_alb_target_group.target_group
-    arn:                                "<computed>"
-    arn_suffix:                         "<computed>"
-    deregistration_delay:               "10"
-    health_check.#:                     "1"
-    health_check.0.healthy_threshold:   "2"
-    health_check.0.interval:            "5"
-    health_check.0.matcher:             "200-299"
-    health_check.0.path:                "/internal/healthcheck"
-    health_check.0.port:                "traffic-port"
-    health_check.0.protocol:            "HTTP"
-    health_check.0.timeout:             "4"
-    health_check.0.unhealthy_threshold: "2"
-    name:                               "dev-foobar-404"
-    port:                               "31337"
-    protocol:                           "HTTP"
-    stickiness.#:                       "<computed>"
-    vpc_id:                             "vpc-12345678"
-        """.strip() in output
-
-    def test_create_404_service_ecs_service(self):
-        # When
-        output = check_output([
-            'terraform',
-            'plan',
-            '-var', 'env=dev',
-            '-var', 'component=foobar',
-            '-var', 'team=foobar',
-            '-var', 'aws_region=eu-west-1',
-            '-var-file=test/platform-config/eu-west-1.json',
-            '-target=module.backend_router.module.404_ecs_service',
-            '-no-color',
-            'test/infra'
-        ]).decode('utf-8')
-
-        # Then
-        assert """
-+ module.backend_router.404_ecs_service.aws_ecs_service.service
-    cluster:                                   "default"
-    deployment_maximum_percent:                "200"
-    deployment_minimum_healthy_percent:        "100"
-    desired_count:                             "1"
-    iam_role:                                  "${aws_iam_role.role.arn}"
-    load_balancer.#:                           "1"
-    load_balancer.~526389260.container_name:   "404"
-    load_balancer.~526389260.container_port:   "80"
-    load_balancer.~526389260.elb_name:         ""
-    load_balancer.~526389260.target_group_arn: "${aws_alb_target_group.target_group.arn}"
-    name:                                      "dev-foobar-404"
-    placement_strategy.#:                      "2"
-    placement_strategy.2093792364.field:       "attribute:ecs.availability-zone"
-    placement_strategy.2093792364.type:        "spread"
-    placement_strategy.3946258308.field:       "instanceId"
-    placement_strategy.3946258308.type:        "spread"
-    task_definition:                           "${var.task_definition}"
-        """.strip() in output # noqa
-
-    def test_create_404_service_iam_role(self):
-        # When
-        output = check_output([
-            'terraform',
-            'plan',
-            '-var', 'env=dev',
-            '-var', 'component=foobar',
-            '-var', 'team=foobar',
-            '-var', 'aws_region=eu-west-1',
-            '-var-file=test/platform-config/eu-west-1.json',
-            '-target=module.backend_router.module.404_ecs_service',
-            '-no-color',
-            'test/infra'
-        ]).decode('utf-8')
-
-        # Then
-        assert """
-+ module.backend_router.404_ecs_service.aws_iam_role.role
-    arn:                "<computed>"
-        """.strip() in output # noqa
-
-        assert """
-    create_date:        "<computed>"
-    name:               "<computed>"
-    name_prefix:        "dev-foobar-404"
-    path:               "/"
-    unique_id:          "<computed>"
-        """.strip() in output # noqa
-
-    def test_create_404_service_iam_role_policy(self):
-        # When
-        output = check_output([
-            'terraform',
-            'plan',
-            '-var', 'env=dev',
-            '-var', 'component=foobar',
-            '-var', 'team=foobar',
-            '-var', 'aws_region=eu-west-1',
-            '-var-file=test/platform-config/eu-west-1.json',
-            '-target=module.backend_router.module.404_ecs_service',
-            '-no-color',
-            'test/infra'
-        ]).decode('utf-8')
-
-        # Then
-        assert """
-+ module.backend_router.404_ecs_service.aws_iam_role_policy.policy
-    name:        "<computed>"
-    name_prefix: "dev-foobar-404
-        """.strip() in output # noqa
-
     def test_create_external_alb(self):
         # When
         output = check_output([
@@ -340,4 +192,41 @@ Plan: 10 to add, 0 to change, 0 to destroy.
     subnets.2377178398:         "subnet-555555555"
     subnets.3586363601:         "subnet-33333333"
     subnets.4231620278:         "subnet-44444444"
+        """.strip() in output # noqa
+
+    def test_default_target_group(self):
+        # When
+        output = check_output([
+            'terraform',
+            'plan',
+            '-var', 'env=dev',
+            '-var', 'component=foobar',
+            '-var', 'team=foobar',
+            '-var', 'aws_region=eu-west-1',
+            '-var-file=test/platform-config/eu-west-1.json',
+            '-target=module.backend_router',
+            '-no-color',
+            'test/infra'
+        ]).decode('utf-8')
+
+        # Then
+        assert """
++ module.backend_router.aws_alb_target_group.default_target_group
+    arn:                                "<computed>"
+    arn_suffix:                         "<computed>"
+    deregistration_delay:               "10"
+    health_check.#:                     "1"
+    health_check.0.healthy_threshold:   "2"
+    health_check.0.interval:            "5"
+    health_check.0.matcher:             "200-299"
+    health_check.0.path:                "/internal/healthcheck"
+    health_check.0.port:                "traffic-port"
+    health_check.0.protocol:            "HTTP"
+    health_check.0.timeout:             "4"
+    health_check.0.unhealthy_threshold: "2"
+    name:                               "dev-foobar-default"
+    port:                               "31337"
+    protocol:                           "HTTP"
+    stickiness.#:                       "<computed>"
+    vpc_id:                             "vpc-12345678"
         """.strip() in output # noqa

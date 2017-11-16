@@ -1,33 +1,3 @@
-module "404_container_definition" {
-  source = "github.com/mergermarket/tf_ecs_container_definition.git"
-
-  name           = "404"
-  image          = "mergermarket/404"
-  cpu            = "16"
-  memory         = "16"
-  container_port = "80"
-}
-
-module "404_task_definition" {
-  source = "github.com/mergermarket/tf_ecs_task_definition"
-
-  family                = "${join("", slice(split("", format("%s-%s", var.env, var.component)), 0, length(format("%s-%s", var.env, var.component)) > 22 ? 23 : length(format("%s-%s", var.env, var.component))))}-404"
-  container_definitions = ["${module.404_container_definition.rendered}"]
-}
-
-module "404_ecs_service" {
-  source = "github.com/mergermarket/tf_load_balanced_ecs_service"
-
-  name                 = "${format("%s-%s-404", var.env, var.component)}"
-  container_name       = "404"
-  container_port       = "80"
-  vpc_id               = "${var.platform_config["vpc"]}"
-  task_definition      = "${module.404_task_definition.arn}"
-  desired_count        = "${var.env == "live" ? 2 : 1}"
-  alb_listener_arn     = "${module.alb.alb_listener_arn}"
-  alb_arn              = "${module.alb.alb_arn}"
-}
-
 module "alb" {
   source = "github.com/mergermarket/tf_alb"
 
@@ -37,7 +7,7 @@ module "alb" {
   internal                 = "${var.alb_internal}"
   extra_security_groups    = "${concat(list(var.platform_config["ecs_cluster.default.client_security_group"]), var.extra_security_groups)}"
   certificate_domain_name  = "${format("*.%s%s", var.env != "live" ? "dev." : "", var.dns_domain)}"
-  default_target_group_arn = "${module.404_ecs_service.target_group_arn}"
+  default_target_group_arn = "${aws_alb_target_group.default_target_group.arn}"
   access_logs_bucket       = "${lookup(var.platform_config, "elb_access_logs_bucket", "")}"
   access_logs_enabled      = "${"${lookup(var.platform_config, "elb_access_logs_bucket", "")}" == "" ? false : true}"
 
@@ -45,5 +15,28 @@ module "alb" {
     component   = "${var.component}"
     environment = "${var.env}"
     team        = "${var.team}"
+  }
+}
+
+resource "aws_alb_target_group" "default_target_group" {
+  name = "${replace(replace("${var.env}-${var.component}-default", "/(.{0,32}).*/", "$1"), "/^-+|-+$/", "")}"
+
+  # port will be set dynamically, but for some reason AWS requires a value
+  port                 = "31337"
+  protocol             = "HTTP"
+  vpc_id               = "${var.platform_config["vpc"]}"
+  deregistration_delay = "${var.default_target_group_deregistration_delay}"
+
+  health_check {
+    interval            = "${var.default_target_group_health_check_interval}"
+    path                = "${var.default_target_group_health_check_path}"
+    timeout             = "${var.default_target_group_health_check_timeout}"
+    healthy_threshold   = "${var.default_target_group_health_check_healthy_threshold}"
+    unhealthy_threshold = "${var.default_target_group_health_check_unhealthy_threshold}"
+    matcher             = "${var.default_target_group_health_check_matcher}"
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
