@@ -19,7 +19,7 @@ module "alb" {
 }
 
 resource "aws_alb_target_group" "default_target_group" {
-  name_prefix = "${replace(replace("${var.env}-${var.component}-default", "/(.{0,32}).*/", "$1"), "/^-+|-+$/", "")}"
+  name = "${replace(replace("${var.env}-default-${var.component}", "/(.{0,32}).*/", "$1"), "/^-+|-+$/", "")}"
 
   # port will be set dynamically, but for some reason AWS requires a value
   port                 = "31337"

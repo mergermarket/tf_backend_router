@@ -224,7 +224,7 @@ Plan: 4 to add, 0 to change, 0 to destroy.
     health_check.0.protocol:            "HTTP"
     health_check.0.timeout:             "4"
     health_check.0.unhealthy_threshold: "2"
-    name:                               "dev-foobar-default"
+    name:                               "dev-default-foobar"
     port:                               "31337"
     protocol:                           "HTTP"
     stickiness.#:                       "<computed>"
