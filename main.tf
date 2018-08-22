@@ -13,7 +13,7 @@ module "alb" {
   subnet_ids               = ["${split(",", var.alb_internal ? var.platform_config["private_subnets"] : var.platform_config["public_subnets"])}"]
   internal                 = "${var.alb_internal}"
   extra_security_groups    = "${concat(list(var.platform_config["ecs_cluster.default.client_security_group"]), var.extra_security_groups)}"
-  certificate_domain_name  = "${format("*.%s%s", var.env != "live" ? "dev." : "", var.dns_domain)}"
+  certificate_domain_name  = "*.${var.dns_domain}"
   default_target_group_arn = "${aws_alb_target_group.default_target_group.arn}"
   access_logs_bucket       = "${lookup(var.platform_config, "elb_access_logs_bucket", "")}"
   access_logs_enabled      = "${"${lookup(var.platform_config, "elb_access_logs_bucket", "")}" == "" ? false : true}"
