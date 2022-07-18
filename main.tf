@@ -1,4 +1,4 @@
-module "404_ecs_service" {
+module "ecs_service_404" {
   source = "modules/deprecated"
 
   name                 = "${format("%s-%s-404", var.env, var.component)}"
